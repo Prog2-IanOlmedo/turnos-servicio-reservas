@@ -1,5 +1,7 @@
 # Servicio de reservas
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Prog2-IanOlmedo_turnos-servicio-reservas&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Prog2-IanOlmedo_turnos-servicio-reservas) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Prog2-IanOlmedo_turnos-servicio-reservas&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Prog2-IanOlmedo_turnos-servicio-reservas)
+
 Backend de turnos (reservas) del proyecto final de Programación 2.
 Spring Boot 4.1.1, Java 25 y PostgreSQL 17.
 
