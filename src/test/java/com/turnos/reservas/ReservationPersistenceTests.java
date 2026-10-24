@@ -12,6 +12,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(TestcontainersConfiguration.class)
@@ -57,5 +59,23 @@ class ReservationPersistenceTests {
         ReservationProcess recargado = repository.findById(proceso.getId()).orElseThrow();
         assertThat(recargado.getStatus()).isEqualTo(ReservationStatus.CONFIRMED);
         assertThat(recargado.getReservationId()).isEqualTo(8251L);
+    }
+
+    @Test
+    void listaSoloLasReservasDelPacienteDeLaMasNuevaALaMasVieja() {
+        repository.save(ReservationProcess.builder().reservationProcessId("p-old").externalPatientId("user-77")
+                .professionalId(15L).date(LocalDate.parse("2026-09-14")).startTime(LocalTime.of(9, 0))
+                .status(ReservationStatus.CONFIRMED).build());
+        repository.save(ReservationProcess.builder().reservationProcessId("p-new").externalPatientId("user-77")
+                .professionalId(15L).date(LocalDate.parse("2026-09-20")).startTime(LocalTime.of(10, 0))
+                .status(ReservationStatus.HELD).build());
+        repository.save(ReservationProcess.builder().reservationProcessId("p-otro").externalPatientId("user-88")
+                .professionalId(15L).date(LocalDate.parse("2026-09-21")).startTime(LocalTime.of(11, 0))
+                .status(ReservationStatus.HELD).build());
+
+        List<ReservationProcess> reservas = repository.findByExternalPatientId("user-77");
+
+        assertThat(reservas).extracting(ReservationProcess::getReservationProcessId)
+                .containsExactly("p-new", "p-old");
     }
 }

@@ -61,6 +61,12 @@ public class ReservationProcess {
                 && !now.isBefore(expiresAt);
     }
 
+    // Cada usuario ve solo lo suyo: la API de la cátedra devuelve las
+    // reservas de toda la cuenta técnica (contrato, sección 11).
+    public boolean belongsTo(String patientId) {
+        return externalPatientId != null && externalPatientId.equals(patientId);
+    }
+
     private boolean moveWithReason(ReservationStatus next, String reason) {
         boolean moved = moveTo(next);
         if (moved) {

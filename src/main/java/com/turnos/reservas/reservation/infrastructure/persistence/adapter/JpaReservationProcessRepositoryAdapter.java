@@ -7,6 +7,7 @@ import com.turnos.reservas.reservation.infrastructure.persistence.repository.Jpa
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -29,5 +30,12 @@ public class JpaReservationProcessRepositoryAdapter implements ReservationProces
     @Override
     public Optional<ReservationProcess> findByReservationProcessId(String reservationProcessId) {
         return jpaRepository.findByReservationProcessId(reservationProcessId).map(mapper::toDomainModel);
+    }
+
+    @Override
+    public List<ReservationProcess> findByExternalPatientId(String externalPatientId) {
+        return jpaRepository.findByExternalPatientIdOrderByDateDescStartTimeDesc(externalPatientId).stream()
+                .map(mapper::toDomainModel)
+                .toList();
     }
 }
