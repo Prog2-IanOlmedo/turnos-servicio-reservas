@@ -84,4 +84,13 @@ class ReservationProcessTest {
             }
         }
     }
+
+    @Test
+    void soloPerteneceASuPaciente() {
+        ReservationProcess proceso = ReservationProcess.builder().externalPatientId("user-42").build();
+
+        assertThat(proceso.belongsTo("user-42")).isTrue();
+        assertThat(proceso.belongsTo("user-99")).isFalse();
+        assertThat(proceso.belongsTo(null)).isFalse();
+    }
 }
