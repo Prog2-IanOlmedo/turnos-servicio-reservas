@@ -1,0 +1,9 @@
+# El .env tiene secretos: entran por variables de entorno, nunca en la imagen
+.env
+target/
+.git/
+.github/
+.idea/
+.vscode/
+*.iml
+docs/
