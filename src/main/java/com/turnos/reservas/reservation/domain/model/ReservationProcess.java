@@ -67,6 +67,29 @@ public class ReservationProcess {
         return externalPatientId != null && externalPatientId.equals(patientId);
     }
 
+    // El proceso nace cuando la cátedra entrega el hold.
+    public static ReservationProcess startFrom(Hold hold, ReservationRequest request) {
+        return ReservationProcess.builder()
+                .reservationProcessId(hold.reservationProcessId())
+                .holdId(hold.holdId())
+                .externalPatientId(request.externalPatientId())
+                .professionalId(request.professionalId())
+                .date(request.date())
+                .startTime(request.startTime())
+                .status(ReservationStatus.HELD)
+                .expiresAt(hold.expiresAt())
+                .build();
+    }
+
+    public boolean isCancelled() {
+        return status == ReservationStatus.CANCELLED;
+    }
+
+    // La cátedra solo cancela reservas confirmadas (sección 12).
+    public boolean canBeCancelled() {
+        return status.canMoveTo(ReservationStatus.CANCELLED);
+    }
+
     private boolean moveWithReason(ReservationStatus next, String reason) {
         boolean moved = moveTo(next);
         if (moved) {
