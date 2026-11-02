@@ -4,3 +4,15 @@
 **Calidad (heurístico, 7 dimensiones):** índice **58/100** · build **OK** · aprobar **no (7/11)** · destacar **no**
 Detalle completo en [`docs/EVALUACION.md`](docs/EVALUACION.md).
 <!-- calidad:fin -->
+
+## Levantar con Docker
+
+Necesita un `.env` en la raíz (copiar `.env.example` y completar los valores).
+
+```bash
+docker compose up -d --build
+```
+
+- La API queda en `http://localhost:8082` (se cambia con `RESERVAS_APP_PORT`).
+- PostgreSQL solo escucha en `127.0.0.1:5434`.
+- El `.env` no se copia a la imagen: compose pasa los valores como variables de entorno.

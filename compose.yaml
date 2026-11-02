@@ -16,5 +16,21 @@ services:
       timeout: 3s
       retries: 10
 
+  reservas:
+    build: .
+    container_name: reservas-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Dentro de la red de compose la base se llama postgres y escucha en 5432
+      RESERVAS_DB_HOST: postgres
+      RESERVAS_DB_PORT: 5432
+      RESERVAS_DB_NAME: ${RESERVAS_DB_NAME}
+      RESERVAS_DB_USER: ${RESERVAS_DB_USER}
+      RESERVAS_DB_PASSWORD: ${RESERVAS_DB_PASSWORD}
+    ports:
+      - "${RESERVAS_APP_PORT:-8082}:8080"
+
 volumes:
   reservas-pgdata:
