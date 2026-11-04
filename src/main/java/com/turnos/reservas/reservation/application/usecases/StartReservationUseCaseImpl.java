@@ -1,6 +1,7 @@
 package com.turnos.reservas.reservation.application.usecases;
 
 import java.time.Instant;
+import java.util.Objects;
 
 import com.turnos.reservas.reservation.application.exception.CatedraRejectedException;
 import com.turnos.reservas.reservation.domain.model.Hold;
@@ -29,7 +30,10 @@ public class StartReservationUseCaseImpl implements StartReservationUseCase {
     public ReservationProcess start(ReservationRequest request) {
         Hold hold = appointmentGateway.createHold(request.professionalId(), request.date(),
                 request.startTime(), request.externalPatientId());
-        ReservationProcess process = reservationProcessRepository.save(ReservationProcess.startFrom(hold, request));
+        // save no debería devolver null; si pasara, mejor un error claro acá que un NPE más abajo.
+        ReservationProcess process = Objects.requireNonNull(
+                reservationProcessRepository.save(ReservationProcess.startFrom(hold, request)),
+                "No se pudo guardar el proceso de reserva");
         try {
             Instant phoneDeadline = appointmentGateway.confirmHold(hold.holdId(), request.externalPatientId(),
                     request.patientFirstName(), request.patientLastName());
