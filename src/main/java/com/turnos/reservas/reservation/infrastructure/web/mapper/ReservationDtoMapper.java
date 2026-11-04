@@ -1,6 +1,8 @@
 package com.turnos.reservas.reservation.infrastructure.web.mapper;
 
 import com.turnos.reservas.reservation.domain.model.ReservationProcess;
+import com.turnos.reservas.reservation.domain.model.ReservationRequest;
+import com.turnos.reservas.reservation.infrastructure.web.dto.StartReservationRequest;
 import com.turnos.reservas.reservation.infrastructure.web.dto.ReservationResponse;
 import org.springframework.stereotype.Component;
 
@@ -24,5 +26,11 @@ public class ReservationDtoMapper {
                 .reservationId(process.getReservationId())
                 .statusReason(process.getStatusReason())
                 .build();
+    }
+
+    // El paciente sale de la URL (después saldrá del JWT), nunca del body.
+    public ReservationRequest toRequest(String externalPatientId, StartReservationRequest body) {
+        return new ReservationRequest(externalPatientId, body.getProfessionalId(), body.getDate(),
+                body.getStartTime(), body.getPatientFirstName(), body.getPatientLastName());
     }
 }

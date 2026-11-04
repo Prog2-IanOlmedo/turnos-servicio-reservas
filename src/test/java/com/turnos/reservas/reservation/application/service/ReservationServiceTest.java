@@ -6,6 +6,9 @@ import com.turnos.reservas.reservation.domain.model.ReservationProcess;
 import com.turnos.reservas.reservation.domain.ports.in.ApplyReservationEventUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationByIdUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationsByPatientUseCase;
+import com.turnos.reservas.reservation.domain.model.ReservationRequest;
+import com.turnos.reservas.reservation.domain.ports.in.CancelReservationUseCase;
+import com.turnos.reservas.reservation.domain.ports.in.StartReservationUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +20,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +36,12 @@ class ReservationServiceTest {
 
     @Mock
     private ApplyReservationEventUseCase applyReservationEventUseCase;
+
+    @Mock
+    private StartReservationUseCase startReservationUseCase;
+
+    @Mock
+    private CancelReservationUseCase cancelReservationUseCase;
 
     @InjectMocks
     private ReservationService service;
@@ -73,5 +85,30 @@ class ReservationServiceTest {
         when(applyReservationEventUseCase.applyEvent(evento)).thenReturn(true);
 
         assertThat(service.applyEvent(evento)).isTrue();
+    }
+
+    @Test
+    void iniciarDelegaEnElCasoDeUso() {
+        ReservationRequest request = new ReservationRequest("user-42", 201L, null, null, "Juan", "Perez");
+        when(startReservationUseCase.start(request)).thenReturn(deUser42);
+
+        assertThat(service.startReservation(request)).isSameAs(deUser42);
+    }
+
+    @Test
+    void cancelaSoloLaReservaPropia() {
+        when(getReservationByIdUseCase.getReservationById(1L)).thenReturn(Optional.of(deUser42));
+        when(cancelReservationUseCase.cancel(deUser42, "motivo")).thenReturn(deUser42);
+
+        assertThat(service.cancelReservation(1L, "user-42", "motivo")).isSameAs(deUser42);
+    }
+
+    @Test
+    void noCancelaUnaReservaAjena() {
+        when(getReservationByIdUseCase.getReservationById(1L)).thenReturn(Optional.of(deUser42));
+
+        assertThatThrownBy(() -> service.cancelReservation(1L, "user-99", null))
+                .isInstanceOf(ReservationNotFoundException.class);
+        verify(cancelReservationUseCase, never()).cancel(any(), any());
     }
 }
