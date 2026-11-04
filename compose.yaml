@@ -29,6 +29,10 @@ services:
       RESERVAS_DB_NAME: ${RESERVAS_DB_NAME}
       RESERVAS_DB_USER: ${RESERVAS_DB_USER}
       RESERVAS_DB_PASSWORD: ${RESERVAS_DB_PASSWORD}
+      CATEDRA_API_URL: ${CATEDRA_API_URL:-}
+      CATEDRA_JWT: ${CATEDRA_JWT:-}
+      # Misma clave en los dos servicios para validar los JWT de los usuarios
+      JWT_SECRET: ${JWT_SECRET:-}
     ports:
       - "${RESERVAS_APP_PORT:-8082}:8080"
 

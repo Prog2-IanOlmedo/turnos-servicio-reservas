@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
-// El patientId va en la URL hasta que haya seguridad; después saldrá del JWT
-// del usuario autenticado.
+// El paciente es el usuario autenticado: sale del JWT ya validado, nunca de la URL
+// ni del body (sección 9). Su login es el externalPatientId ante la cátedra.
 @RestController
-@RequestMapping("/api/patients/{patientId}/reservations")
+@RequestMapping("/api/reservations")
 @RequiredArgsConstructor
 public class ReservationController {
 
@@ -29,31 +30,31 @@ public class ReservationController {
     private final ReservationDtoMapper reservationDtoMapper;
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> getReservations(@PathVariable String patientId) {
-        return ResponseEntity.ok(reservationService.getReservationsByPatient(patientId).stream()
+    public ResponseEntity<List<ReservationResponse>> getReservations(Principal principal) {
+        return ResponseEntity.ok(reservationService.getReservationsByPatient(principal.getName()).stream()
                 .map(reservationDtoMapper::toResponse)
                 .toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponse> getReservation(@PathVariable String patientId, @PathVariable Long id) {
+    public ResponseEntity<ReservationResponse> getReservation(Principal principal, @PathVariable Long id) {
         return ResponseEntity.ok(reservationDtoMapper.toResponse(
-                reservationService.getReservationForPatient(id, patientId)));
+                reservationService.getReservationForPatient(id, principal.getName())));
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponse> startReservation(@PathVariable String patientId,
+    public ResponseEntity<ReservationResponse> startReservation(Principal principal,
                                                                 @Valid @RequestBody StartReservationRequest body) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservationDtoMapper.toResponse(
-                reservationService.startReservation(reservationDtoMapper.toRequest(patientId, body))));
+                reservationService.startReservation(reservationDtoMapper.toRequest(principal.getName(), body))));
     }
 
     @PostMapping("/{id}/cancel")
     public ResponseEntity<ReservationResponse> cancelReservation(
-            @PathVariable String patientId, @PathVariable Long id,
+            Principal principal, @PathVariable Long id,
             @Valid @RequestBody(required = false) CancelReservationRequest body) {
         String reason = body != null ? body.getReason() : null;
         return ResponseEntity.ok(reservationDtoMapper.toResponse(
-                reservationService.cancelReservation(id, patientId, reason)));
+                reservationService.cancelReservation(id, principal.getName(), reason)));
     }
 }

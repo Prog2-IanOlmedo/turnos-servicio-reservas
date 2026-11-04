@@ -97,4 +97,18 @@ class SecurityIntegrationTests {
     void elHealthEsPublico() throws Exception {
         mockMvc.perform(get("/actuator/health")).andExpect(status().isOk());
     }
+
+    @Test
+    void lasReservasPidenToken() throws Exception {
+        mockMvc.perform(get("/api/reservations")).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void conTokenCadaUsuarioVeSoloLoSuyo() throws Exception {
+        String token = registrarYLoguear("sinreservas");
+
+        mockMvc.perform(get("/api/reservations").header(HttpHeaders.AUTHORIZATION, "Bearer " + token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+    }
 }

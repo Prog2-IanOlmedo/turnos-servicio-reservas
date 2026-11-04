@@ -50,7 +50,7 @@ class ReservationControllerTest {
     void listaLasReservasDelPaciente() throws Exception {
         when(reservationService.getReservationsByPatient("user-42")).thenReturn(List.of(confirmada));
 
-        mockMvc.perform(get("/api/patients/user-42/reservations"))
+        mockMvc.perform(get("/api/reservations").principal(() -> "user-42"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].status").value("CONFIRMED"))
                 .andExpect(jsonPath("$[0].date").value("2026-09-14"))
@@ -61,7 +61,7 @@ class ReservationControllerTest {
     void devuelveUnaReservaDelPaciente() throws Exception {
         when(reservationService.getReservationForPatient(1L, "user-42")).thenReturn(confirmada);
 
-        mockMvc.perform(get("/api/patients/user-42/reservations/1"))
+        mockMvc.perform(get("/api/reservations/1").principal(() -> "user-42"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.reservationProcessId").value("process-a92b47d0"))
                 .andExpect(jsonPath("$.holdId").doesNotExist());
@@ -72,7 +72,7 @@ class ReservationControllerTest {
         when(reservationService.getReservationForPatient(1L, "user-99"))
                 .thenThrow(new ReservationNotFoundException(1L));
 
-        mockMvc.perform(get("/api/patients/user-99/reservations/1"))
+        mockMvc.perform(get("/api/reservations/1").principal(() -> "user-99"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(jsonPath("$.code").value("RESERVATION_NOT_FOUND"));
@@ -80,7 +80,7 @@ class ReservationControllerTest {
 
     @Test
     void unIdNoNumericoRespondeBadRequest() throws Exception {
-        mockMvc.perform(get("/api/patients/user-42/reservations/abc"))
+        mockMvc.perform(get("/api/reservations/abc").principal(() -> "user-42"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("BAD_REQUEST"));
     }
@@ -90,7 +90,7 @@ class ReservationControllerTest {
         when(reservationService.getReservationsByPatient("user-42"))
                 .thenThrow(new IllegalStateException("detalle interno"));
 
-        mockMvc.perform(get("/api/patients/user-42/reservations"))
+        mockMvc.perform(get("/api/reservations").principal(() -> "user-42"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.code").value("INTERNAL_ERROR"))
                 .andExpect(jsonPath("$.detail").value("Ocurrió un error inesperado."));
