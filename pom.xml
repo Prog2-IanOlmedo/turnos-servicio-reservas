@@ -177,6 +177,16 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- Los tests no se conectan al Kafka de la cátedra -->
+					<systemPropertyVariables>
+						<spring.kafka.listener.auto-startup>false</spring.kafka.listener.auto-startup>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.15</version>

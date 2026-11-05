@@ -33,6 +33,11 @@ services:
       CATEDRA_JWT: ${CATEDRA_JWT:-}
       # Misma clave en los dos servicios para validar los JWT de los usuarios
       JWT_SECRET: ${JWT_SECRET:-}
+      KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-}
+      KAFKA_CONSUMER_GROUP_ID: ${KAFKA_CONSUMER_GROUP_ID:-}
+      CATEDRA_GROUP_ID: ${CATEDRA_GROUP_ID:-}
+      KAFKA_ACTIONS_TOPIC: ${KAFKA_ACTIONS_TOPIC:-}
+      KAFKA_PHONE_TOPIC: ${KAFKA_PHONE_TOPIC:-}
     ports:
       - "${RESERVAS_APP_PORT:-8082}:8080"
 
