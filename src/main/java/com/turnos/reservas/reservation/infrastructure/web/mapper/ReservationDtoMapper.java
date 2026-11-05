@@ -25,6 +25,7 @@ public class ReservationDtoMapper {
                 .expiresAt(process.getExpiresAt())
                 .reservationId(process.getReservationId())
                 .statusReason(process.getStatusReason())
+                .phoneRequested(process.canSubmitPhone())
                 .build();
     }
 

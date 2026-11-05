@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -118,5 +119,20 @@ class StartReservationUseCaseImplTest {
 
         assertThatThrownBy(() -> useCase.start(request)).isInstanceOf(CatedraRejectedException.class);
         verify(reservationProcessRepository, times(1)).save(any());
+    }
+
+    @Test
+    void siKafkaYaRegistroElPedidoDeTelefonoNoLoPisa() {
+        ReservationProcess yaEsperando = ReservationProcess.builder().id(7L).reservationProcessId("process-1")
+                .status(ReservationStatus.WAITING_FOR_PHONE).phoneRequestEventId("request-1")
+                .expiresAt(VENCE_TELEFONO).build();
+        when(appointmentGateway.createHold(201L, FECHA, HORA, "user-42")).thenReturn(hold);
+        when(appointmentGateway.confirmHold("hold-1", "user-42", "Juan", "Perez")).thenReturn(VENCE_TELEFONO);
+        when(reservationProcessRepository.findById(any())).thenReturn(Optional.of(yaEsperando));
+
+        ReservationProcess process = useCase.start(request);
+
+        assertThat(process.getPhoneRequestEventId()).isEqualTo("request-1");
+        assertThat(process.getStatus()).isEqualTo(ReservationStatus.WAITING_FOR_PHONE);
     }
 }

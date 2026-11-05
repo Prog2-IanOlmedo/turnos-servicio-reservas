@@ -3,6 +3,8 @@ package com.turnos.reservas.reservation.infrastructure.web.controller;
 import com.turnos.reservas.reservation.application.exception.CatedraRejectedException;
 import com.turnos.reservas.reservation.application.exception.CatedraUnavailableException;
 import com.turnos.reservas.reservation.application.exception.ReservationNotCancellableException;
+import com.turnos.reservas.reservation.application.exception.InvalidPhoneNumberException;
+import com.turnos.reservas.reservation.application.exception.PhoneNotRequestedException;
 import com.turnos.reservas.reservation.application.service.ReservationService;
 import com.turnos.reservas.reservation.domain.model.ReservationProcess;
 import com.turnos.reservas.reservation.domain.model.ReservationRequest;
@@ -150,5 +152,46 @@ class ReservationCommandsControllerTest {
         mockMvc.perform(post(URL + "/7/cancel").principal(USUARIO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("RESERVATION_NOT_CANCELLABLE"));
+    }
+
+    @Test
+    void elTelefonoSeAceptaConUn202() throws Exception {
+        when(reservationService.submitPhone(7L, "user-42", "+54 261 555-1234"))
+                .thenReturn(procesoEn(ReservationStatus.WAITING_FOR_PHONE));
+
+        mockMvc.perform(post(URL + "/7/phone").principal(USUARIO).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phoneNumber\": \"+54 261 555-1234\"}"))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$.status").value("WAITING_FOR_PHONE"))
+                .andExpect(jsonPath("$.phoneRequested").value(false));
+    }
+
+    @Test
+    void unTelefonoInvalidoDevuelve400() throws Exception {
+        when(reservationService.submitPhone(7L, "user-42", "abc"))
+                .thenThrow(new InvalidPhoneNumberException(new IllegalArgumentException()));
+
+        mockMvc.perform(post(URL + "/7/phone").principal(USUARIO).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phoneNumber\": \"abc\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_PHONE_NUMBER"));
+    }
+
+    @Test
+    void sinPedidoDeTelefonoDevuelve409() throws Exception {
+        when(reservationService.submitPhone(7L, "user-42", "2615551234"))
+                .thenThrow(new PhoneNotRequestedException(7L, ReservationStatus.CONFIRMED));
+
+        mockMvc.perform(post(URL + "/7/phone").principal(USUARIO).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phoneNumber\": \"2615551234\"}"))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("PHONE_NOT_REQUESTED"));
+    }
+
+    @Test
+    void unTelefonoVacioNoLlegaAlServicio() throws Exception {
+        mockMvc.perform(post(URL + "/7/phone").principal(USUARIO).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"phoneNumber\": \"\"}"))
+                .andExpect(status().isBadRequest());
     }
 }
