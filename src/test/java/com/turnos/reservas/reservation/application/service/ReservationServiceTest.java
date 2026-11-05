@@ -8,6 +8,7 @@ import com.turnos.reservas.reservation.domain.ports.in.GetReservationByIdUseCase
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationsByPatientUseCase;
 import com.turnos.reservas.reservation.domain.model.ReservationRequest;
 import com.turnos.reservas.reservation.domain.ports.in.CancelReservationUseCase;
+import com.turnos.reservas.reservation.domain.ports.in.SubmitPhoneUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.StartReservationUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,6 +43,9 @@ class ReservationServiceTest {
 
     @Mock
     private CancelReservationUseCase cancelReservationUseCase;
+
+    @Mock
+    private SubmitPhoneUseCase submitPhoneUseCase;
 
     @InjectMocks
     private ReservationService service;
@@ -110,5 +114,15 @@ class ReservationServiceTest {
         assertThatThrownBy(() -> service.cancelReservation(1L, "user-99", null))
                 .isInstanceOf(ReservationNotFoundException.class);
         verify(cancelReservationUseCase, never()).cancel(any(), any());
+    }
+
+    @Test
+    void soloElDuenoRespondeElPedidoDeTelefono() {
+        when(getReservationByIdUseCase.getReservationById(1L)).thenReturn(Optional.of(deUser42));
+        when(submitPhoneUseCase.submitPhone(deUser42, "2615551234")).thenReturn(deUser42);
+
+        assertThat(service.submitPhone(1L, "user-42", "2615551234")).isSameAs(deUser42);
+        assertThatThrownBy(() -> service.submitPhone(1L, "user-99", "2615551234"))
+                .isInstanceOf(ReservationNotFoundException.class);
     }
 }

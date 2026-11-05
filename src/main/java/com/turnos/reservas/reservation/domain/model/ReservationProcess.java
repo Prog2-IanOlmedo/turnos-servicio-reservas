@@ -23,6 +23,7 @@ public class ReservationProcess {
     private Instant expiresAt;
     private Long reservationId;
     private String statusReason;
+    private String phoneRequestEventId;
 
     // Cada transición devuelve false si no aplica (evento duplicado,
     // tardío o fuera de orden): Kafka entrega "al menos una vez".
@@ -88,6 +89,43 @@ public class ReservationProcess {
     // La cátedra solo cancela reservas confirmadas (sección 12).
     public boolean canBeCancelled() {
         return status.canMoveTo(ReservationStatus.CANCELLED);
+    }
+
+    // Pedido del teléfono (contrato 15.4). Guardo su eventId porque la respuesta lo
+    // exige como requestEventId. Puede llegar por Kafka antes de que termine nuestra
+    // confirmación por REST: si el proceso sigue HELD, lo paso a esperar el teléfono.
+    public boolean registerPhoneRequest(String requestEventId, Instant deadline) {
+        if (requestEventId == null) {
+            return false;
+        }
+        if (status == ReservationStatus.HELD) {
+            moveTo(ReservationStatus.WAITING_FOR_PHONE);
+        }
+        if (status != ReservationStatus.WAITING_FOR_PHONE || requestEventId.equals(phoneRequestEventId)) {
+            return false;
+        }
+        this.phoneRequestEventId = requestEventId;
+        if (deadline != null) {
+            this.expiresAt = deadline;
+        }
+        return true;
+    }
+
+    // Teléfono rechazado (15.7): el proceso sigue abierto hasta expiresAt y se puede
+    // mandar otro. Dejo el motivo para que la app se lo muestre al usuario.
+    public boolean rejectPhone(String reason, Instant deadline) {
+        if (status != ReservationStatus.WAITING_FOR_PHONE) {
+            return false;
+        }
+        this.statusReason = reason;
+        if (deadline != null) {
+            this.expiresAt = deadline;
+        }
+        return true;
+    }
+
+    public boolean canSubmitPhone() {
+        return status == ReservationStatus.WAITING_FOR_PHONE && phoneRequestEventId != null;
     }
 
     private boolean moveWithReason(ReservationStatus next, String reason) {

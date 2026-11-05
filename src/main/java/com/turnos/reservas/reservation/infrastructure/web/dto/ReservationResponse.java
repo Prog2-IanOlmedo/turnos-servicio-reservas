@@ -22,4 +22,6 @@ public class ReservationResponse {
     private Instant expiresAt;
     private Long reservationId;
     private String statusReason;
+    // true cuando la cátedra pidió el teléfono y la app tiene que mostrar el formulario.
+    private boolean phoneRequested;
 }
