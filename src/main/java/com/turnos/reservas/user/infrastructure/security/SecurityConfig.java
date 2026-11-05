@@ -17,14 +17,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-// Público: registro, login y health. Todo lo demás exige un JWT válido (sección 9).
+// Público: registro, login y health. El resto de la API exige un JWT válido (sección 9).
 @Configuration
 public class SecurityConfig {
 
     private static final String[] PUBLIC_POSTS = {"/api/register", "/api/authenticate"};
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 // Sin sesión ni cookies: el JWT viaja en el header. Spring ya excluye de CSRF
                 // los pedidos con Bearer; acá excluyo solo registro y login, que no lo traen.

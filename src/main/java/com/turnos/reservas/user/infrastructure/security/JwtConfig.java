@@ -25,6 +25,7 @@ public class JwtConfig {
 
     private static final String ALGORITHM = "HmacSHA512";
     private static final int MIN_KEY_BYTES = 64;
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     // Sin clave genero una al azar para que levanten los tests y el CI sin
     // secretos en el repo. Con una clave cargada pero corta, no arranco.
@@ -33,7 +34,7 @@ public class JwtConfig {
         if (secret == null || secret.isBlank()) {
             log.warn("JWT_SECRET vacía: uso una clave al azar. Los tokens no sobreviven un reinicio.");
             byte[] random = new byte[MIN_KEY_BYTES];
-            new SecureRandom().nextBytes(random);
+            RANDOM.nextBytes(random);
             return new SecretKeySpec(random, ALGORITHM);
         }
         byte[] bytes = Base64.getDecoder().decode(secret.trim());
