@@ -6,7 +6,7 @@ import com.turnos.reservas.reservation.infrastructure.web.dto.StartReservationRe
 import com.turnos.reservas.reservation.infrastructure.web.dto.ReservationResponse;
 import org.springframework.stereotype.Component;
 
-// holdId es un dato interno de la cátedra y el paciente ya viene en la URL:
+// holdId es un dato interno de la cátedra y el paciente es el usuario autenticado:
 // ninguno de los dos se expone.
 @Component
 public class ReservationDtoMapper {
@@ -28,7 +28,7 @@ public class ReservationDtoMapper {
                 .build();
     }
 
-    // El paciente sale de la URL (después saldrá del JWT), nunca del body.
+    // El paciente es el usuario del JWT, nunca un dato del body.
     public ReservationRequest toRequest(String externalPatientId, StartReservationRequest body) {
         return new ReservationRequest(externalPatientId, body.getProfessionalId(), body.getDate(),
                 body.getStartTime(), body.getPatientFirstName(), body.getPatientLastName());

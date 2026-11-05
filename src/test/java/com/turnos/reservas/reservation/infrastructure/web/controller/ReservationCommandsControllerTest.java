@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -34,7 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class ReservationCommandsControllerTest {
 
-    private static final String URL = "/api/patients/user-42/reservations";
+    private static final String URL = "/api/reservations";
+    private static final Principal USUARIO = () -> "user-42";
     private static final String BODY_VALIDO = """
             {"professionalId": 201, "date": "2026-11-09", "startTime": "12:00",
              "patientFirstName": "Juan", "patientLastName": "Perez"}
@@ -64,7 +66,7 @@ class ReservationCommandsControllerTest {
     void iniciaLaReservaConElPacienteDeLaUrl() throws Exception {
         when(reservationService.startReservation(any())).thenReturn(procesoEn(ReservationStatus.WAITING_FOR_PHONE));
 
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(7))
                 .andExpect(jsonPath("$.status").value("WAITING_FOR_PHONE"));
@@ -77,7 +79,7 @@ class ReservationCommandsControllerTest {
 
     @Test
     void rechazaUnPedidoIncompleto() throws Exception {
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content("{\"professionalId\": 201}"))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content("{\"professionalId\": 201}"))
                 .andExpect(status().isBadRequest());
     }
 
@@ -86,7 +88,7 @@ class ReservationCommandsControllerTest {
         when(reservationService.startReservation(any()))
                 .thenThrow(new CatedraRejectedException(409, "SLOT_ALREADY_HELD"));
 
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("SLOT_ALREADY_HELD"));
     }
@@ -95,7 +97,7 @@ class ReservationCommandsControllerTest {
     void unRechazoSinCodeUsaUnCodeGenerico() throws Exception {
         when(reservationService.startReservation(any())).thenThrow(new CatedraRejectedException(400, null));
 
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("CATEDRA_REJECTED"));
     }
@@ -104,7 +106,7 @@ class ReservationCommandsControllerTest {
     void siFallaNuestraCredencialDevuelve502() throws Exception {
         when(reservationService.startReservation(any())).thenThrow(new CatedraRejectedException(401, null));
 
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
                 .andExpect(status().isBadGateway())
                 .andExpect(jsonPath("$.code").value("CATEDRA_AUTH_ERROR"));
     }
@@ -114,7 +116,7 @@ class ReservationCommandsControllerTest {
         when(reservationService.startReservation(any()))
                 .thenThrow(new CatedraUnavailableException("sin respuesta", null));
 
-        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
+        mockMvc.perform(post(URL).principal(USUARIO).contentType(MediaType.APPLICATION_JSON).content(BODY_VALIDO))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.code").value("CATEDRA_UNAVAILABLE"));
     }
@@ -124,7 +126,7 @@ class ReservationCommandsControllerTest {
         when(reservationService.cancelReservation(7L, "user-42", "Cambio de planes"))
                 .thenReturn(procesoEn(ReservationStatus.CANCELLED));
 
-        mockMvc.perform(post(URL + "/7/cancel").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post(URL + "/7/cancel").principal(USUARIO).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"reason\": \"Cambio de planes\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
@@ -135,7 +137,7 @@ class ReservationCommandsControllerTest {
         when(reservationService.cancelReservation(any(), any(), isNull()))
                 .thenReturn(procesoEn(ReservationStatus.CANCELLED));
 
-        mockMvc.perform(post(URL + "/7/cancel"))
+        mockMvc.perform(post(URL + "/7/cancel").principal(USUARIO))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("CANCELLED"));
     }
@@ -145,7 +147,7 @@ class ReservationCommandsControllerTest {
         when(reservationService.cancelReservation(7L, "user-42", null))
                 .thenThrow(new ReservationNotCancellableException(7L, ReservationStatus.WAITING_FOR_PHONE));
 
-        mockMvc.perform(post(URL + "/7/cancel"))
+        mockMvc.perform(post(URL + "/7/cancel").principal(USUARIO))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("RESERVATION_NOT_CANCELLABLE"));
     }
