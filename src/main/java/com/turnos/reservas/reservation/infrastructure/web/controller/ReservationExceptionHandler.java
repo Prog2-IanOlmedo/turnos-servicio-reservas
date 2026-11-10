@@ -2,6 +2,8 @@ package com.turnos.reservas.reservation.infrastructure.web.controller;
 
 import com.turnos.reservas.reservation.application.exception.CatedraRejectedException;
 import com.turnos.reservas.reservation.application.exception.CatedraUnavailableException;
+import com.turnos.reservas.reservation.application.exception.InvalidPhoneNumberException;
+import com.turnos.reservas.reservation.application.exception.PhoneNotRequestedException;
 import com.turnos.reservas.reservation.application.exception.ReservationNotCancellableException;
 import com.turnos.reservas.reservation.application.exception.ReservationNotFoundException;
 import com.turnos.reservas.shared.web.ApiProblem;
@@ -46,5 +48,15 @@ public class ReservationExceptionHandler {
     public ProblemDetail handleCatedraUnavailable(CatedraUnavailableException ex, HttpServletRequest request) {
         return ApiProblem.of(HttpStatus.SERVICE_UNAVAILABLE, "CATEDRA_UNAVAILABLE",
                 "El servicio de turnos no está disponible. Probá de nuevo en unos minutos.", request.getRequestURI());
+    }
+
+    @ExceptionHandler(InvalidPhoneNumberException.class)
+    public ProblemDetail handleInvalidPhone(InvalidPhoneNumberException ex, HttpServletRequest request) {
+        return ApiProblem.of(HttpStatus.BAD_REQUEST, "INVALID_PHONE_NUMBER", ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(PhoneNotRequestedException.class)
+    public ProblemDetail handlePhoneNotRequested(PhoneNotRequestedException ex, HttpServletRequest request) {
+        return ApiProblem.of(HttpStatus.CONFLICT, "PHONE_NOT_REQUESTED", ex.getMessage(), request.getRequestURI());
     }
 }

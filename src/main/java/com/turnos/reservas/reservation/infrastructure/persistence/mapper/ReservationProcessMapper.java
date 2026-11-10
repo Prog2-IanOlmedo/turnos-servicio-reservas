@@ -23,6 +23,7 @@ public class ReservationProcessMapper {
                 .expiresAt(process.getExpiresAt())
                 .reservationId(process.getReservationId())
                 .statusReason(process.getStatusReason())
+                .phoneRequestEventId(process.getPhoneRequestEventId())
                 .build();
     }
 
@@ -42,6 +43,7 @@ public class ReservationProcessMapper {
                 .expiresAt(entity.getExpiresAt())
                 .reservationId(entity.getReservationId())
                 .statusReason(entity.getStatusReason())
+                .phoneRequestEventId(entity.getPhoneRequestEventId())
                 .build();
     }
 }

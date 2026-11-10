@@ -37,8 +37,11 @@ public class StartReservationUseCaseImpl implements StartReservationUseCase {
         try {
             Instant phoneDeadline = appointmentGateway.confirmHold(hold.holdId(), request.externalPatientId(),
                     request.patientFirstName(), request.patientLastName());
-            process.markWaitingForPhone(phoneDeadline);
-            return reservationProcessRepository.save(process);
+            // Kafka pudo haber registrado el pedido de teléfono mientras esperábamos
+            // esta respuesta REST: releo el proceso para no pisar ese dato.
+            ReservationProcess current = reservationProcessRepository.findById(process.getId()).orElse(process);
+            current.markWaitingForPhone(phoneDeadline);
+            return reservationProcessRepository.save(current);
         } catch (CatedraRejectedException e) {
             // Sección 18.3: si el hold venció se cierra el proceso local.
             if (e.hasCode(HOLD_EXPIRED)) {

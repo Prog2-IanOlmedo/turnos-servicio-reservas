@@ -38,4 +38,5 @@ public class ReservationProcessEntity {
     private Instant expiresAt;
     private Long reservationId;
     private String statusReason;
+    private String phoneRequestEventId;
 }

@@ -2,6 +2,7 @@ package com.turnos.reservas.reservation.infrastructure.web.controller;
 
 import com.turnos.reservas.reservation.application.service.ReservationService;
 import com.turnos.reservas.reservation.infrastructure.web.dto.CancelReservationRequest;
+import com.turnos.reservas.reservation.infrastructure.web.dto.PhoneRequest;
 import com.turnos.reservas.reservation.infrastructure.web.dto.ReservationResponse;
 import com.turnos.reservas.reservation.infrastructure.web.dto.StartReservationRequest;
 import com.turnos.reservas.reservation.infrastructure.web.mapper.ReservationDtoMapper;
@@ -56,5 +57,13 @@ public class ReservationController {
         String reason = body != null ? body.getReason() : null;
         return ResponseEntity.ok(reservationDtoMapper.toResponse(
                 reservationService.cancelReservation(id, principal.getName(), reason)));
+    }
+
+    // 202 y no 200: la confirmación o el rechazo llegan después por Kafka.
+    @PostMapping("/{id}/phone")
+    public ResponseEntity<ReservationResponse> submitPhone(Principal principal, @PathVariable Long id,
+                                                           @Valid @RequestBody PhoneRequest body) {
+        return ResponseEntity.accepted().body(reservationDtoMapper.toResponse(
+                reservationService.submitPhone(id, principal.getName(), body.getPhoneNumber())));
     }
 }

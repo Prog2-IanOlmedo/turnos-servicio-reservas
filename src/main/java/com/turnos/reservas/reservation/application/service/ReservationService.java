@@ -6,6 +6,7 @@ import com.turnos.reservas.reservation.domain.model.ReservationProcess;
 import com.turnos.reservas.reservation.domain.model.ReservationRequest;
 import com.turnos.reservas.reservation.domain.ports.in.CancelReservationUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.StartReservationUseCase;
+import com.turnos.reservas.reservation.domain.ports.in.SubmitPhoneUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.ApplyReservationEventUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationByIdUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationsByPatientUseCase;
@@ -23,6 +24,7 @@ public class ReservationService {
     private final ApplyReservationEventUseCase applyReservationEventUseCase;
     private final StartReservationUseCase startReservationUseCase;
     private final CancelReservationUseCase cancelReservationUseCase;
+    private final SubmitPhoneUseCase submitPhoneUseCase;
 
     public List<ReservationProcess> getReservationsByPatient(String externalPatientId) {
         return getReservationsByPatientUseCase.getReservationsByPatient(externalPatientId);
@@ -47,5 +49,10 @@ public class ReservationService {
     // Solo el dueño puede cancelar: una reserva ajena se responde como inexistente.
     public ReservationProcess cancelReservation(Long id, String externalPatientId, String reason) {
         return cancelReservationUseCase.cancel(getReservationForPatient(id, externalPatientId), reason);
+    }
+
+    // Igual que al cancelar: solo el dueño puede responder el pedido de teléfono.
+    public ReservationProcess submitPhone(Long id, String externalPatientId, String phoneNumber) {
+        return submitPhoneUseCase.submitPhone(getReservationForPatient(id, externalPatientId), phoneNumber);
     }
 }
