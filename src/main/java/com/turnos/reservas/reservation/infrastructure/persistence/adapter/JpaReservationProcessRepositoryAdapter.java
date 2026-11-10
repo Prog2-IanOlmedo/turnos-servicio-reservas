@@ -1,12 +1,14 @@
 package com.turnos.reservas.reservation.infrastructure.persistence.adapter;
 
 import com.turnos.reservas.reservation.domain.model.ReservationProcess;
+import com.turnos.reservas.reservation.domain.model.ReservationStatus;
 import com.turnos.reservas.reservation.domain.ports.out.ReservationProcessRepository;
 import com.turnos.reservas.reservation.infrastructure.persistence.mapper.ReservationProcessMapper;
 import com.turnos.reservas.reservation.infrastructure.persistence.repository.JpaReservationProcessRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +37,14 @@ public class JpaReservationProcessRepositoryAdapter implements ReservationProces
     @Override
     public List<ReservationProcess> findByExternalPatientId(String externalPatientId) {
         return jpaRepository.findByExternalPatientIdOrderByDateDescStartTimeDesc(externalPatientId).stream()
+                .map(mapper::toDomainModel)
+                .toList();
+    }
+
+    @Override
+    public List<ReservationProcess> findOpenProcesses() {
+        List<ReservationStatus> open = Arrays.stream(ReservationStatus.values()).filter(ReservationStatus::isOpen).toList();
+        return jpaRepository.findByStatusIn(open).stream()
                 .map(mapper::toDomainModel)
                 .toList();
     }

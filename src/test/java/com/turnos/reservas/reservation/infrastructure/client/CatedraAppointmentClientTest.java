@@ -18,6 +18,8 @@ import java.util.List;
 
 import com.turnos.reservas.reservation.application.exception.CatedraRejectedException;
 import com.turnos.reservas.reservation.application.exception.CatedraUnavailableException;
+import com.turnos.reservas.reservation.domain.model.Appointment;
+import com.turnos.reservas.reservation.domain.model.AppointmentStatus;
 import com.turnos.reservas.reservation.domain.model.Hold;
 import com.turnos.reservas.reservation.domain.model.Occupancy;
 import com.turnos.reservas.reservation.domain.model.OccupancyStatus;
@@ -178,5 +180,32 @@ class CatedraAppointmentClientTest {
         assertThatThrownBy(() -> client.createHold(201L, FECHA, HORA, "user-42"))
                 .isInstanceOf(CatedraUnavailableException.class)
                 .hasMessageContaining("sin cuerpo");
+    }
+
+    @Test
+    void traeLasReservasDelPacienteSinFiltroDeFechas() {
+        server.expect(requestTo(BASE + "/api/appointments?externalPatientId=ian-demo&size=100"))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withSuccess("""
+                        [{"reservationId": 1662, "reservationProcessId": "process-c2d5", "externalPatientId": "ian-demo",
+                          "appointmentDate": "2026-11-09", "status": "CONFIRMED"},
+                         {"reservationId": null, "reservationProcessId": "process-0d36", "status": "FAILED"},
+                         {"reservationId": 9, "reservationProcessId": "process-x", "status": "ESTADO_NUEVO"}]
+                        """, MediaType.APPLICATION_JSON));
+
+        List<Appointment> reservas = client.findAppointments("ian-demo");
+
+        server.verify();
+        assertThat(reservas).containsExactly(
+                new Appointment("process-c2d5", 1662L, AppointmentStatus.CONFIRMED),
+                new Appointment("process-0d36", null, AppointmentStatus.FAILED));
+    }
+
+    @Test
+    void sinReservasDevuelveListaVacia() {
+        server.expect(requestTo(BASE + "/api/appointments?externalPatientId=nadie&size=100"))
+                .andRespond(withSuccess("[]", MediaType.APPLICATION_JSON));
+
+        assertThat(client.findAppointments("nadie")).isEmpty();
     }
 }

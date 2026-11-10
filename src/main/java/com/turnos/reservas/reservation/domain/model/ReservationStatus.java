@@ -10,6 +10,11 @@ public enum ReservationStatus {
     EXPIRED,
     INVALID;
 
+    // Procesos que todavía esperan algo de la cátedra.
+    public boolean isOpen() {
+        return this == HELD || this == WAITING_FOR_PHONE;
+    }
+
     public boolean isFinal() {
         return this == CANCELLED || this == EXPIRED || this == INVALID;
     }
