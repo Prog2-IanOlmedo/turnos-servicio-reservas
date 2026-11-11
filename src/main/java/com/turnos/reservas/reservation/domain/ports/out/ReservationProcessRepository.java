@@ -12,4 +12,5 @@ public interface ReservationProcessRepository {
     Optional<ReservationProcess> findByReservationProcessId(String reservationProcessId);
     List<ReservationProcess> findByExternalPatientId(String externalPatientId);
 
+    List<ReservationProcess> findOpenProcesses();
 }

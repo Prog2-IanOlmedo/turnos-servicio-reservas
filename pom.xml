@@ -183,6 +183,7 @@
 					<!-- Los tests no se conectan al Kafka de la cátedra -->
 					<systemPropertyVariables>
 						<spring.kafka.listener.auto-startup>false</spring.kafka.listener.auto-startup>
+						<reservas.recovery.enabled>false</reservas.recovery.enabled>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>

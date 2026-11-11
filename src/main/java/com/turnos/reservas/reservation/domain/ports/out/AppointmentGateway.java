@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.turnos.reservas.reservation.domain.model.Appointment;
 import com.turnos.reservas.reservation.domain.model.Hold;
 import com.turnos.reservas.reservation.domain.model.Occupancy;
 
@@ -19,4 +20,7 @@ public interface AppointmentGateway {
     Instant confirmHold(String holdId, String externalPatientId, String patientFirstName, String patientLastName);
 
     void cancel(String reservationProcessId, String reason);
+
+    // Reservas de un paciente en la cátedra (sección 11), para reconciliar procesos.
+    List<Appointment> findAppointments(String externalPatientId);
 }

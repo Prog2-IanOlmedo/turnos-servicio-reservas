@@ -128,6 +128,23 @@ public class ReservationProcess {
         return status == ReservationStatus.WAITING_FOR_PHONE && phoneRequestEventId != null;
     }
 
+    // Recuperación de un proceso abierto que venció (contrato 18.3 y 18.4): manda lo
+    // que informa la cátedra. Sin reserva allá, el hold venció sin confirmarse. Si
+    // todavía figura esperando el teléfono, se deja para el próximo intento.
+    public boolean reconcileWith(Appointment appointment, Instant now) {
+        if (!isOverdueAt(now)) {
+            return false;
+        }
+        if (appointment == null) {
+            return expire("HOLD_EXPIRED");
+        }
+        return switch (appointment.status()) {
+            case CONFIRMED -> confirm(appointment.reservationId());
+            case PHONE_PENDING -> false;
+            case CANCELLED, FAILED -> expire(appointment.status().name());
+        };
+    }
+
     private boolean moveWithReason(ReservationStatus next, String reason) {
         boolean moved = moveTo(next);
         if (moved) {

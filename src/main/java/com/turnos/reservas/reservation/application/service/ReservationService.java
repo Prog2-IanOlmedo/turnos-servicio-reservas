@@ -10,6 +10,7 @@ import com.turnos.reservas.reservation.domain.ports.in.SubmitPhoneUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.ApplyReservationEventUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationByIdUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationsByPatientUseCase;
+import com.turnos.reservas.reservation.domain.ports.in.ReconcileOverdueProcessesUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationService {
 
+    private final ReconcileOverdueProcessesUseCase reconcileOverdueProcessesUseCase;
     private final GetReservationsByPatientUseCase getReservationsByPatientUseCase;
     private final GetReservationByIdUseCase getReservationByIdUseCase;
     private final ApplyReservationEventUseCase applyReservationEventUseCase;
@@ -54,5 +56,9 @@ public class ReservationService {
     // Igual que al cancelar: solo el dueño puede responder el pedido de teléfono.
     public ReservationProcess submitPhone(Long id, String externalPatientId, String phoneNumber) {
         return submitPhoneUseCase.submitPhone(getReservationForPatient(id, externalPatientId), phoneNumber);
+    }
+
+    public int reconcileOverdueProcesses() {
+        return reconcileOverdueProcessesUseCase.reconcile();
     }
 }

@@ -9,9 +9,11 @@ import java.util.function.Supplier;
 
 import com.turnos.reservas.reservation.application.exception.CatedraRejectedException;
 import com.turnos.reservas.reservation.application.exception.CatedraUnavailableException;
+import com.turnos.reservas.reservation.domain.model.Appointment;
 import com.turnos.reservas.reservation.domain.model.Hold;
 import com.turnos.reservas.reservation.domain.model.Occupancy;
 import com.turnos.reservas.reservation.domain.ports.out.AppointmentGateway;
+import com.turnos.reservas.reservation.infrastructure.client.dto.CatedraAppointmentDto;
 import com.turnos.reservas.reservation.infrastructure.client.dto.CatedraCancelRequestDto;
 import com.turnos.reservas.reservation.infrastructure.client.dto.CatedraConfirmRequestDto;
 import com.turnos.reservas.reservation.infrastructure.client.dto.CatedraConfirmResponseDto;
@@ -35,6 +37,8 @@ import org.springframework.web.client.RestClientException;
 public class CatedraAppointmentClient implements AppointmentGateway {
 
     private static final DateTimeFormatter HORA = DateTimeFormatter.ofPattern("HH:mm");
+    // La cátedra pagina de a 20 por defecto; un paciente no debería tener más de 100 abiertas.
+    private static final int APPOINTMENTS_PAGE_SIZE = 100;
 
     private final RestClient catedraRestClient;
     private final CatedraAppointmentMapper mapper;
@@ -88,6 +92,20 @@ public class CatedraAppointmentClient implements AppointmentGateway {
                 .body(new CatedraCancelRequestDto(reason))
                 .retrieve()
                 .toBodilessEntity());
+    }
+
+    // Sin filtro de fechas: con from/to la cátedra hoy responde 500 (reportado en Slack).
+    @Override
+    public List<Appointment> findAppointments(String externalPatientId) {
+        CatedraAppointmentDto[] dtos = call(() -> catedraRestClient.get()
+                .uri(uri -> uri.path("/api/appointments")
+                        .queryParam("externalPatientId", externalPatientId)
+                        .queryParam("size", APPOINTMENTS_PAGE_SIZE)
+                        .build())
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(CatedraAppointmentDto[].class));
+        return mapper.toAppointments(dtos);
     }
 
     private <T> T call(Supplier<T> request) {
