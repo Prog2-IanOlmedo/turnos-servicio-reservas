@@ -9,6 +9,6 @@ import java.util.List;
 public record WeeklySlots(DayOfWeek dayOfWeek, List<LocalTime> slots) {
 
     public boolean isOn(LocalDate date) {
-        return date.getDayOfWeek() == dayOfWeek;
+        return dayOfWeek.equals(date.getDayOfWeek());
     }
 }

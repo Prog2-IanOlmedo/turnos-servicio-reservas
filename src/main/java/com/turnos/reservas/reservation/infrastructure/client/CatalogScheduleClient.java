@@ -33,7 +33,7 @@ public class CatalogScheduleClient implements ProfessionalScheduleSource {
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
                     .body(CatalogScheduleDto[].class);
-        } catch (HttpClientErrorException.NotFound e) {
+        } catch (HttpClientErrorException.NotFound _) {
             throw new ProfessionalNotFoundException(professionalId);
         } catch (RestClientException e) {
             throw new CatalogUnavailableException("No se pudo consultar la agenda en el catálogo", e);
