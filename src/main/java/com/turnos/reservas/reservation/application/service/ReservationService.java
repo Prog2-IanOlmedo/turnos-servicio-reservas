@@ -11,6 +11,9 @@ import com.turnos.reservas.reservation.domain.ports.in.ApplyReservationEventUseC
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationByIdUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.GetReservationsByPatientUseCase;
 import com.turnos.reservas.reservation.domain.ports.in.ReconcileOverdueProcessesUseCase;
+import com.turnos.reservas.reservation.domain.model.Availability;
+import com.turnos.reservas.reservation.domain.ports.in.GetAvailabilityUseCase;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReservationService {
 
+    private final GetAvailabilityUseCase getAvailabilityUseCase;
     private final ReconcileOverdueProcessesUseCase reconcileOverdueProcessesUseCase;
     private final GetReservationsByPatientUseCase getReservationsByPatientUseCase;
     private final GetReservationByIdUseCase getReservationByIdUseCase;
@@ -60,5 +64,9 @@ public class ReservationService {
 
     public int reconcileOverdueProcesses() {
         return reconcileOverdueProcessesUseCase.reconcile();
+    }
+
+    public Availability getAvailability(Long professionalId, LocalDate date) {
+        return getAvailabilityUseCase.getAvailability(professionalId, date);
     }
 }
