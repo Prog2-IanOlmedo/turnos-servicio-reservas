@@ -1,5 +1,5 @@
 services:
-  postgres:
+  reservas-db:
     image: postgres:17
     container_name: reservas-postgres
     environment:
@@ -22,11 +22,11 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:
-      postgres:
+      reservas-db:
         condition: service_healthy
     environment:
-      # Dentro de la red de compose la base se llama postgres y escucha en 5432
-      RESERVAS_DB_HOST: postgres
+      # Dentro de la red de compose la base se llama reservas-db y escucha en 5432
+      RESERVAS_DB_HOST: reservas-db
       RESERVAS_DB_PORT: 5432
       RESERVAS_DB_NAME: ${RESERVAS_DB_NAME}
       RESERVAS_DB_USER: ${RESERVAS_DB_USER}
