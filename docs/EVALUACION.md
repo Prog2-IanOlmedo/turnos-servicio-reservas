@@ -3,19 +3,19 @@
 
 > Documento **generado automáticamente** por la cátedra de Programación II (UM): RepoSense + análisis de calidad de **7 dimensiones**. **No editar a mano**: se regenera en cada evaluación.
 > Rama evaluada: `main`. Análisis **heurístico** (regex + métricas) + build: es una criba para orientar la revisión, **no una nota**. La **documentación** del repositorio no se evalúa.
-> Generado: 2026-11-12.
+> Generado: 2026-11-17.
 
 ## 1. Veredicto
 
 | Aspecto | Resultado |
 |---|---|
-| Índice de calidad | **76/100** |
+| Índice de calidad | **77/100** |
 | Tipo de repositorio | `backend` |
 | Build (`mvnw verify` / `gradlew check`) | OK |
 | Código (LOC) | 4,521 |
 | Archivos de código | 138 |
 | Clases | 139 |
-| Código dentro de clases (%POO) | 70% |
+| Código dentro de clases (%POO) | 65% |
 | Funciones fuera de clases | 0 |
 | Duplicación (puerta) | 0.0% |
 | Duplicación lógica | 0.0% |
@@ -52,7 +52,7 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 | Dimensión | Peso | Puntaje |
 |:--|--:|--:|
-| **D1** Diseño OO, SOLID y patrones (20%) | 20% | 3 |
+| **D1** Diseño OO, SOLID y patrones (20%) | 20% | 7 |
 | **D2** Arquitectura hexagonal — backend (15%) | 15% | 100 |
 | **D3** Frontend KMP: MVVM y buenas prácticas (10%) | 10% | N/A |
 | **D4** Integración y contrato (10%) | 10% | 80 |
@@ -64,7 +64,7 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 - **Qué mide:** Métricas orientadas a objetos (clases, métodos, campos, cohesión, acoplamiento, herencia) y proxies de SOLID, más patrones de diseño.
 - **Por qué importa:** El eje de la materia es el buen uso de la POO y su arquitectura: un diseño con clases claras y poco acopladas es más fácil de entender, probar y cambiar.
-- **Tu resultado:** **3/100**
+- **Tu resultado:** **7/100**
 - **Para investigar la causa:**
     - ¿Se pensó el modelo de clases antes de codificar o se agrupó después?
     - ¿Qué clases concentran muchas responsabilidades a la vez?
@@ -104,38 +104,20 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 El análisis encontró las siguientes señales (archivo, sin número de línea a propósito):
 
-**SRP/responsabilidad** (29)
+**SRP/responsabilidad** (11)
 - clase 'ReservationProcessEntity' grande (LOC=18, métodos=0, campos=12) — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java`
-- clase 'ReservationProcessEntity' sin métodos (12 campos): solo datos — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java`
 - clase 'CatedraAppointmentClient' con baja cohesión (29%) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java`
 - clase 'ReservationResponse' grande (LOC=13, métodos=0, campos=10) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/dto/ReservationResponse.java`
-- clase 'ReservationResponse' sin métodos (10 campos): solo datos — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/dto/ReservationResponse.java`
-- clase 'StartReservationRequest' sin métodos (5 campos): solo datos — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/dto/StartReservationRequest.java`
 - clase 'ReservationService' con baja cohesión (4%) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java`
 - clase 'ReservationProcess' grande (LOC=134, métodos=17, campos=12) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
 - clase 'ReservationProcess' con baja cohesión (24%) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
 - método 'ReservationProcess.reconcileWith' con complejidad 6 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
 - método 'ReservationEvent.applyTo' con complejidad 7 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java`
 - clase 'UserEntity' grande (LOC=28, métodos=0, campos=11) — `src/main/java/com/turnos/reservas/user/infrastructure/persistence/entity/UserEntity.java`
-- clase 'UserEntity' sin métodos (11 campos): solo datos — `src/main/java/com/turnos/reservas/user/infrastructure/persistence/entity/UserEntity.java`
 - clase 'AccountResponse' grande (LOC=12, métodos=0, campos=10) — `src/main/java/com/turnos/reservas/user/infrastructure/web/dto/AccountResponse.java`
-- clase 'AccountResponse' sin métodos (10 campos): solo datos — `src/main/java/com/turnos/reservas/user/infrastructure/web/dto/AccountResponse.java`
-- clase 'LoginRequest' sin métodos (3 campos): solo datos — `src/main/java/com/turnos/reservas/user/infrastructure/web/dto/LoginRequest.java`
-- clase 'RegisterRequest' sin métodos (7 campos): solo datos — `src/main/java/com/turnos/reservas/user/infrastructure/web/dto/RegisterRequest.java`
 - clase 'User' grande (LOC=31, métodos=1, campos=12) — `src/main/java/com/turnos/reservas/user/domain/model/User.java`
-- clase 'SecurityIntegrationTests' grande (LOC=66, métodos=10, campos=2) — `src/test/java/com/turnos/reservas/SecurityIntegrationTests.java`
-- clase 'CatedraAppointmentClientTest' grande (LOC=146, métodos=29, campos=5) — `src/test/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClientTest.java`
-- clase 'CatedraAppointmentClientTest' con baja cohesión (33%) — `src/test/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClientTest.java`
-- clase 'ReservationCommandsControllerTest' grande (LOC=130, métodos=16, campos=5) — `src/test/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationCommandsControllerTest.java`
-- clase 'ReservationServiceTest' grande (LOC=73, métodos=9, campos=8) — `src/test/java/com/turnos/reservas/reservation/application/service/ReservationServiceTest.java`
-- clase 'ReconcileOverdueProcessesUseCaseImplTest' con baja cohesión (29%) — `src/test/java/com/turnos/reservas/reservation/application/usecases/ReconcileOverdueProcessesUseCaseImplTest.java`
-- clase 'StartReservationUseCaseImplTest' grande (LOC=83, métodos=7, campos=9) — `src/test/java/com/turnos/reservas/reservation/application/usecases/StartReservationUseCaseImplTest.java`
-- clase 'ReservationReconcileTest' grande (LOC=64, métodos=11, campos=3) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationReconcileTest.java`
-- clase 'ReservationReconcileTest' con baja cohesión (27%) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationReconcileTest.java`
-- clase 'ReservationPhoneTest' grande (LOC=80, métodos=12, campos=1) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationPhoneTest.java`
-- clase 'AccountControllerTest' grande (LOC=93, métodos=10, campos=4) — `src/test/java/com/turnos/reservas/user/infrastructure/web/controller/AccountControllerTest.java`
 
-**DIP/concretos** (62)
+**DIP/concretos** (29)
 - clase 'ReservationProcessEntity' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java`
 - clase 'CatedraReservationEventListener' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/CatedraReservationEventListener.java`
 - clase 'KafkaPhoneSubmissionPublisher' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java`
@@ -165,39 +147,6 @@ El análisis encontró las siguientes señales (archivo, sin número de línea a
 - clase 'UserExceptionHandler' muy acoplada (CBO=15) — `src/main/java/com/turnos/reservas/user/infrastructure/web/controller/UserExceptionHandler.java`
 - clase 'RegisterUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/RegisterUserUseCaseImpl.java`
 - clase 'AuthenticateUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/AuthenticateUserUseCaseImpl.java`
-- clase 'OpenProcessesPersistenceTests' muy acoplada (CBO=10) — `src/test/java/com/turnos/reservas/OpenProcessesPersistenceTests.java`
-- clase 'SecurityIntegrationTests' muy acoplada (CBO=20) — `src/test/java/com/turnos/reservas/SecurityIntegrationTests.java`
-- clase 'SecurityIntegrationTests' instancia 4 concretos (CBO=20) — `src/test/java/com/turnos/reservas/SecurityIntegrationTests.java`
-- clase 'ReservationPersistenceTests' muy acoplada (CBO=9) — `src/test/java/com/turnos/reservas/ReservationPersistenceTests.java`
-- clase 'UserPersistenceTests' muy acoplada (CBO=9) — `src/test/java/com/turnos/reservas/UserPersistenceTests.java`
-- clase 'CatedraReservationEventListenerTest' muy acoplada (CBO=15) — `src/test/java/com/turnos/reservas/reservation/infrastructure/messaging/CatedraReservationEventListenerTest.java`
-- clase 'KafkaPhoneSubmissionPublisherTest' muy acoplada (CBO=15) — `src/test/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisherTest.java`
-- clase 'KafkaPhoneSubmissionPublisherTest' instancia 4 concretos (CBO=15) — `src/test/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisherTest.java`
-- clase 'CatedraAppointmentClientTest' muy acoplada (CBO=40) — `src/test/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClientTest.java`
-- clase 'CatedraAppointmentClientTest' instancia 4 concretos (CBO=40) — `src/test/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClientTest.java`
-- clase 'ReservationCommandsControllerTest' muy acoplada (CBO=35) — `src/test/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationCommandsControllerTest.java`
-- clase 'ReservationCommandsControllerTest' instancia 12 concretos (CBO=35) — `src/test/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationCommandsControllerTest.java`
-- clase 'ReservationControllerTest' muy acoplada (CBO=19) — `src/test/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationControllerTest.java`
-- clase 'ReservationControllerTest' instancia 6 concretos (CBO=19) — `src/test/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationControllerTest.java`
-- clase 'ReservationServiceTest' muy acoplada (CBO=13) — `src/test/java/com/turnos/reservas/reservation/application/service/ReservationServiceTest.java`
-- clase 'CancelReservationUseCaseImplTest' muy acoplada (CBO=11) — `src/test/java/com/turnos/reservas/reservation/application/usecases/CancelReservationUseCaseImplTest.java`
-- clase 'ApplyReservationEventUseCaseImplTest' muy acoplada (CBO=11) — `src/test/java/com/turnos/reservas/reservation/application/usecases/ApplyReservationEventUseCaseImplTest.java`
-- clase 'ReconcileOverdueProcessesUseCaseImplTest' muy acoplada (CBO=15) — `src/test/java/com/turnos/reservas/reservation/application/usecases/ReconcileOverdueProcessesUseCaseImplTest.java`
-- clase 'ReconcileOverdueProcessesUseCaseImplTest' instancia 4 concretos (CBO=15) — `src/test/java/com/turnos/reservas/reservation/application/usecases/ReconcileOverdueProcessesUseCaseImplTest.java`
-- clase 'SubmitPhoneUseCaseImplTest' muy acoplada (CBO=11) — `src/test/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImplTest.java`
-- clase 'StartReservationUseCaseImplTest' muy acoplada (CBO=21) — `src/test/java/com/turnos/reservas/reservation/application/usecases/StartReservationUseCaseImplTest.java`
-- clase 'StartReservationUseCaseImplTest' instancia 6 concretos (CBO=21) — `src/test/java/com/turnos/reservas/reservation/application/usecases/StartReservationUseCaseImplTest.java`
-- clase 'ReservationReconcileTest' muy acoplada (CBO=15) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationReconcileTest.java`
-- clase 'ReservationPhoneTest' muy acoplada (CBO=11) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationPhoneTest.java`
-- clase 'ReservationEventTest' muy acoplada (CBO=21) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationEventTest.java`
-- clase 'ReservationProcessTest' muy acoplada (CBO=10) — `src/test/java/com/turnos/reservas/reservation/domain/model/ReservationProcessTest.java`
-- clase 'JwtTokenIssuerTest' muy acoplada (CBO=14) — `src/test/java/com/turnos/reservas/user/infrastructure/security/JwtTokenIssuerTest.java`
-- clase 'AccountControllerTest' muy acoplada (CBO=26) — `src/test/java/com/turnos/reservas/user/infrastructure/web/controller/AccountControllerTest.java`
-- clase 'AccountControllerTest' instancia 8 concretos (CBO=26) — `src/test/java/com/turnos/reservas/user/infrastructure/web/controller/AccountControllerTest.java`
-- clase 'AuthenticateUserUseCaseImplTest' muy acoplada (CBO=8) — `src/test/java/com/turnos/reservas/user/application/usecases/AuthenticateUserUseCaseImplTest.java`
-- clase 'RegisterUserUseCaseImplTest' muy acoplada (CBO=9) — `src/test/java/com/turnos/reservas/user/application/usecases/RegisterUserUseCaseImplTest.java`
-- clase 'UserTest' muy acoplada (CBO=8) — `src/test/java/com/turnos/reservas/user/domain/model/UserTest.java`
-- clase 'UserTest' instancia 4 concretos (CBO=8) — `src/test/java/com/turnos/reservas/user/domain/model/UserTest.java`
 
 **OCP/type-switch** (1)
 - clase 'GlobalExceptionHandler' con 1 type-checks — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java`
@@ -211,25 +160,25 @@ xychart-beta
     title "Índice de calidad a lo largo de los commits"
     x-axis ["4bff92a", "4c5525c", "93056c6", "6301db6", "d82f2f0", "18443c4", "ecee5a2", "c0b966d", "df190cf", "76ef317", "476f48e", "360b673", "1973401", "c4b62a1"]
     y-axis "Índice" 0 --> 100
-    line [0, 15, 44, 49, 44, 46, 53, 58, 58, 58, 59, 65, 65, 65]
+    line [0, 15, 42, 47, 43, 46, 53, 59, 59, 59, 61, 66, 66, 66]
 ```
 
 | # | Fecha | Commit | Autor | LOC | Índice | %POO | Duplic. | Sueltas |
 |---|---|---|---|---:|---:|---:|---:|---:|
 | 1 | 2026-09-05 | `4bff92a` | IanOlmedo | 0 | 0 | 0% | 0.0% | 0 |
 | 2 | 2026-09-10 | `4c5525c` | Ing. Daniel Quinteros | 0 | 15 | 0% | 0.0% | 0 |
-| 3 | 2026-10-13 | `93056c6` | IanOlmedo | 41 | 44 | 54% | 0.0% | 0 |
-| 4 | 2026-10-17 | `6301db6` | Ing. Daniel Quinteros | 41 | 49 | 54% | 0.0% | 0 |
-| 5 | 2026-10-22 | `d82f2f0` | IanOlmedo | 199 | 44 | 82% | 0.0% | 0 |
-| 6 | 2026-10-24 | `18443c4` | IanOlmedo | 371 | 46 | 75% | 0.0% | 0 |
-| 7 | 2026-10-24 | `ecee5a2` | IanOlmedo | 656 | 53 | 73% | 0.0% | 0 |
-| 8 | 2026-10-30 | `c0b966d` | IanOlmedo | 1,116 | 58 | 69% | 2.6% | 0 |
-| 9 | 2026-11-02 | `df190cf` | IanOlmedo | 1,116 | 58 | 69% | 2.6% | 0 |
-| 10 | 2026-11-02 | `76ef317` | IanOlmedo | 1,544 | 58 | 68% | 1.9% | 0 |
-| 11 | 2026-11-04 | `476f48e` | IanOlmedo | 2,094 | 59 | 69% | 1.4% | 0 |
-| 12 | 2026-11-05 | `360b673` | IanOlmedo | 3,334 | 65 | 68% | 0.9% | 0 |
-| 13 | 2026-11-10 | `1973401` | IanOlmedo | 4,056 | 65 | 70% | 0.0% | 0 |
-| 14 | 2026-11-11 | `c4b62a1` | IanOlmedo | 4,521 | 65 | 70% | 0.0% | 0 |
+| 3 | 2026-10-13 | `93056c6` | IanOlmedo | 41 | 42 | 56% | 0.0% | 0 |
+| 4 | 2026-10-17 | `6301db6` | Ing. Daniel Quinteros | 41 | 47 | 56% | 0.0% | 0 |
+| 5 | 2026-10-22 | `d82f2f0` | IanOlmedo | 199 | 43 | 83% | 0.0% | 0 |
+| 6 | 2026-10-24 | `18443c4` | IanOlmedo | 371 | 46 | 73% | 0.0% | 0 |
+| 7 | 2026-10-24 | `ecee5a2` | IanOlmedo | 656 | 53 | 70% | 0.0% | 0 |
+| 8 | 2026-10-30 | `c0b966d` | IanOlmedo | 1,116 | 59 | 65% | 2.6% | 0 |
+| 9 | 2026-11-02 | `df190cf` | IanOlmedo | 1,116 | 59 | 65% | 2.6% | 0 |
+| 10 | 2026-11-02 | `76ef317` | IanOlmedo | 1,544 | 59 | 63% | 1.9% | 0 |
+| 11 | 2026-11-04 | `476f48e` | IanOlmedo | 2,094 | 61 | 64% | 1.4% | 0 |
+| 12 | 2026-11-05 | `360b673` | IanOlmedo | 3,334 | 66 | 64% | 0.9% | 0 |
+| 13 | 2026-11-10 | `1973401` | IanOlmedo | 4,056 | 66 | 65% | 0.0% | 0 |
+| 14 | 2026-11-11 | `c4b62a1` | IanOlmedo | 4,521 | 66 | 65% | 0.0% | 0 |
 
 ---
 _Informe generado por la cátedra. Las dimensiones y umbrales corresponden a `calidad.py` (perfil `exigente`); el semáforo, a `CRITERIOS-CALIDAD.md`. La documentación del repositorio no se evalúa. Ante dudas, revisá el archivo señalado._
