@@ -3,7 +3,7 @@
 
 > Documento **generado automáticamente** por la cátedra de Programación II (UM): RepoSense + análisis de calidad de **7 dimensiones**. **No editar a mano**: se regenera en cada evaluación.
 > Rama evaluada: `main`. Análisis **heurístico** (regex + métricas) + build: es una criba para orientar la revisión, **no una nota**. La **documentación** del repositorio no se evalúa.
-> Generado: 2026-11-17.
+> Generado: 2026-11-18.
 
 ## 1. Veredicto
 
@@ -12,14 +12,14 @@
 | Índice de calidad | **77/100** |
 | Tipo de repositorio | `backend` |
 | Build (`mvnw verify` / `gradlew check`) | OK |
-| Código (LOC) | 4,521 |
-| Archivos de código | 138 |
-| Clases | 139 |
-| Código dentro de clases (%POO) | 65% |
+| Código (LOC) | 5,037 |
+| Archivos de código | 157 |
+| Clases | 158 |
+| Código dentro de clases (%POO) | 64% |
 | Funciones fuera de clases | 0 |
 | Duplicación (puerta) | 0.0% |
 | Duplicación lógica | 0.0% |
-| Duplicación de boilerplate | 3.8% |
+| Duplicación de boilerplate | 4.8% |
 | Cobertura | 97% |
 | Tope duro aplicado a D1 | `POO_BAJO` → D1 ≤ 60 |
 
@@ -31,10 +31,8 @@ Criterios de la cátedra (`CRITERIOS-CALIDAD.md`): **Aprobar** se juega con el p
 
 | Semáforo | Resultado |
 |---|---|
-| Aprobar (`estandar`) | **no cumple** — 7/11 |
+| Aprobar (`estandar`) | **cumple** — 8/11 |
 | Destacar (`exigente`) | **no cumple** — 6/11 |
-
-**Para aprobar, falta cumplir:** SOLID
 
 **Para destacar, falta cumplir:** SOLID; POO
 
@@ -42,7 +40,7 @@ Criterios de la cátedra (`CRITERIOS-CALIDAD.md`): **Aprobar** se juega con el p
 
 | Autor | Commits | Código (LOC) | Tests (LOC) | Docs (LOC) | Días activos | % del código |
 |---|---:|---:|---:|---:|---:|---:|
-| IanOlmedo | 41 | 2,745 | 2,738 | 12 | 14 | 100% |
+| IanOlmedo | 44 | 3,034 | 3,075 | 135 | 16 | 100% |
 
 > _El LOC de autoría lo calcula RepoSense sobre el historial y puede diferir del LOC de código del análisis (que mira el estado de `main`)._
 
@@ -102,65 +100,87 @@ Cada dimensión indica **qué mide**, **por qué importa** y **tu resultado**. C
 
 ## 5. Señales detectadas
 
-El análisis encontró las siguientes señales (archivo, sin número de línea a propósito):
+El análisis encontró las siguientes señales, con el archivo y la línea donde se originan cuando están disponibles:
 
-**SRP/responsabilidad** (11)
-- clase 'ReservationProcessEntity' grande (LOC=18, métodos=0, campos=12) — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java`
-- clase 'CatedraAppointmentClient' con baja cohesión (29%) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java`
-- clase 'ReservationResponse' grande (LOC=13, métodos=0, campos=10) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/dto/ReservationResponse.java`
-- clase 'ReservationService' con baja cohesión (4%) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java`
-- clase 'ReservationProcess' grande (LOC=134, métodos=17, campos=12) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
-- clase 'ReservationProcess' con baja cohesión (24%) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
-- método 'ReservationProcess.reconcileWith' con complejidad 6 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
-- método 'ReservationEvent.applyTo' con complejidad 7 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java`
-- clase 'UserEntity' grande (LOC=28, métodos=0, campos=11) — `src/main/java/com/turnos/reservas/user/infrastructure/persistence/entity/UserEntity.java`
-- clase 'AccountResponse' grande (LOC=12, métodos=0, campos=10) — `src/main/java/com/turnos/reservas/user/infrastructure/web/dto/AccountResponse.java`
-- clase 'User' grande (LOC=31, métodos=1, campos=12) — `src/main/java/com/turnos/reservas/user/domain/model/User.java`
+**Archivos con más señales**
 
-**DIP/concretos** (29)
-- clase 'ReservationProcessEntity' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java`
-- clase 'CatedraReservationEventListener' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/CatedraReservationEventListener.java`
-- clase 'KafkaPhoneSubmissionPublisher' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java`
-- clase 'KafkaPhoneSubmissionPublisher' instancia 3 concretos (CBO=17) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java`
-- clase 'CatedraAppointmentClient' muy acoplada (CBO=33) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java`
-- clase 'CatedraAppointmentClient' instancia 6 concretos (CBO=33) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java`
-- clase 'CatedraAppointmentMapper' muy acoplada (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/mapper/CatedraAppointmentMapper.java`
-- clase 'CatedraAppointmentMapper' instancia 3 concretos (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/mapper/CatedraAppointmentMapper.java`
-- clase 'ReservationController' muy acoplada (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationController.java`
-- clase 'ReservationExceptionHandler' muy acoplada (CBO=27) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationExceptionHandler.java`
-- clase 'ReservationService' muy acoplada (CBO=14) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java`
-- clase 'StartReservationUseCaseImpl' muy acoplada (CBO=12) — `src/main/java/com/turnos/reservas/reservation/application/usecases/StartReservationUseCaseImpl.java`
-- clase 'SubmitPhoneUseCaseImpl' muy acoplada (CBO=13) — `src/main/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImpl.java`
-- clase 'SubmitPhoneUseCaseImpl' instancia 3 concretos (CBO=13) — `src/main/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImpl.java`
-- clase 'ReconcileOverdueProcessesUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/reservation/application/usecases/ReconcileOverdueProcessesUseCaseImpl.java`
-- clase 'AppointmentGateway' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/domain/ports/out/AppointmentGateway.java`
-- clase 'ReservationProcess' muy acoplada (CBO=29) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java`
-- clase 'ReservationEventType' muy acoplada (CBO=13) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEventType.java`
-- clase 'ReservationEvent' muy acoplada (CBO=12) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java`
-- clase 'GlobalExceptionHandler' muy acoplada (CBO=14) — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java`
-- clase 'JwtConfig' muy acoplada (CBO=18) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtConfig.java`
-- clase 'JwtConfig' instancia 5 concretos (CBO=18) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtConfig.java`
-- clase 'JwtTokenIssuer' muy acoplada (CBO=10) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtTokenIssuer.java`
-- clase 'SecurityConfig' muy acoplada (CBO=33) — `src/main/java/com/turnos/reservas/user/infrastructure/security/SecurityConfig.java`
-- clase 'SecurityConfig' instancia 4 concretos (CBO=33) — `src/main/java/com/turnos/reservas/user/infrastructure/security/SecurityConfig.java`
-- clase 'AccountController' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/user/infrastructure/web/controller/AccountController.java`
-- clase 'UserExceptionHandler' muy acoplada (CBO=15) — `src/main/java/com/turnos/reservas/user/infrastructure/web/controller/UserExceptionHandler.java`
-- clase 'RegisterUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/RegisterUserUseCaseImpl.java`
-- clase 'AuthenticateUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/AuthenticateUserUseCaseImpl.java`
+| Archivo | Señales |
+|---|---:|
+| `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java` | 4 |
+| `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java` | 3 |
+| `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java` | 3 |
+| `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java` | 3 |
+| `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java` | 2 |
+| `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatalogScheduleClient.java` | 2 |
+| `src/main/java/com/turnos/reservas/reservation/infrastructure/client/BearerTokenPropagationInterceptor.java` | 2 |
+| `src/main/java/com/turnos/reservas/reservation/infrastructure/client/mapper/CatedraAppointmentMapper.java` | 2 |
+| `src/main/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImpl.java` | 2 |
+| `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java` | 2 |
 
-**OCP/type-switch** (1)
-- clase 'GlobalExceptionHandler' con 1 type-checks — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java`
+**DIP/concretos** (33)
+- clase 'ReservationService' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java:24`
+- clase 'ReconcileOverdueProcessesUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/reservation/application/usecases/ReconcileOverdueProcessesUseCaseImpl.java:25`
+- clase 'StartReservationUseCaseImpl' muy acoplada (CBO=12) — `src/main/java/com/turnos/reservas/reservation/application/usecases/StartReservationUseCaseImpl.java:22`
+- clase 'SubmitPhoneUseCaseImpl' muy acoplada (CBO=13) — `src/main/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImpl.java:18`
+- clase 'SubmitPhoneUseCaseImpl' instancia 3 concretos (CBO=13) — `src/main/java/com/turnos/reservas/reservation/application/usecases/SubmitPhoneUseCaseImpl.java:18`
+- clase 'ReservationEvent' muy acoplada (CBO=12) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java:11`
+- clase 'ReservationEventType' muy acoplada (CBO=13) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEventType.java:7`
+- clase 'ReservationProcess' muy acoplada (CBO=29) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java:14`
+- clase 'AppointmentGateway' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/domain/ports/out/AppointmentGateway.java:13`
+- clase 'BearerTokenPropagationInterceptor' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/BearerTokenPropagationInterceptor.java:15`
+- clase 'CatalogScheduleClient' muy acoplada (CBO=15) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatalogScheduleClient.java:21`
+- clase 'CatalogScheduleClient' instancia 3 concretos (CBO=15) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatalogScheduleClient.java:21`
+- clase 'CatedraAppointmentClient' muy acoplada (CBO=33) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java:37`
+- clase 'CatedraAppointmentClient' instancia 6 concretos (CBO=33) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java:37`
+- clase 'CatedraAppointmentMapper' muy acoplada (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/mapper/CatedraAppointmentMapper.java:18`
+- clase 'CatedraAppointmentMapper' instancia 3 concretos (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/mapper/CatedraAppointmentMapper.java:18`
+- clase 'CatedraReservationEventListener' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/CatedraReservationEventListener.java:21`
+- clase 'KafkaPhoneSubmissionPublisher' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java:25`
+- clase 'KafkaPhoneSubmissionPublisher' instancia 3 concretos (CBO=17) — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/KafkaPhoneSubmissionPublisher.java:25`
+- clase 'ReservationProcessEntity' muy acoplada (CBO=8) — `src/main/java/com/turnos/reservas/reservation/infrastructure/persistence/entity/ReservationProcessEntity.java:25`
+- clase 'AvailabilityController' muy acoplada (CBO=15) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/controller/AvailabilityController.java:24`
+- clase 'ReservationController' muy acoplada (CBO=11) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationController.java:28`
+- clase 'ReservationExceptionHandler' muy acoplada (CBO=27) — `src/main/java/com/turnos/reservas/reservation/infrastructure/web/controller/ReservationExceptionHandler.java:22`
+- clase 'GlobalExceptionHandler' muy acoplada (CBO=14) — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java:18`
+- clase 'AuthenticateUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/AuthenticateUserUseCaseImpl.java:16`
+- clase 'RegisterUserUseCaseImpl' muy acoplada (CBO=9) — `src/main/java/com/turnos/reservas/user/application/usecases/RegisterUserUseCaseImpl.java:18`
+- clase 'JwtConfig' muy acoplada (CBO=18) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtConfig.java:24`
+- clase 'JwtConfig' instancia 5 concretos (CBO=18) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtConfig.java:24`
+- clase 'JwtTokenIssuer' muy acoplada (CBO=10) — `src/main/java/com/turnos/reservas/user/infrastructure/security/JwtTokenIssuer.java:18`
+- clase 'SecurityConfig' muy acoplada (CBO=33) — `src/main/java/com/turnos/reservas/user/infrastructure/security/SecurityConfig.java:22`
+- clase 'SecurityConfig' instancia 4 concretos (CBO=33) — `src/main/java/com/turnos/reservas/user/infrastructure/security/SecurityConfig.java:22`
+- clase 'AccountController' muy acoplada (CBO=17) — `src/main/java/com/turnos/reservas/user/infrastructure/web/controller/AccountController.java:26`
+- clase 'UserExceptionHandler' muy acoplada (CBO=15) — `src/main/java/com/turnos/reservas/user/infrastructure/web/controller/UserExceptionHandler.java:19`
+
+**SRP/responsabilidad** (13)
+- clase 'ReservationService' grande (LOC=40, métodos=8, campos=8) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java:24`
+- clase 'ReservationService' con baja cohesión (0%) — `src/main/java/com/turnos/reservas/reservation/application/service/ReservationService.java:24`
+- método 'PhoneSubmission.PhoneSubmission' con 6 parámetros — `src/main/java/com/turnos/reservas/reservation/domain/model/PhoneSubmission.java:7`
+- método 'ReservationEvent.applyTo' con complejidad 7 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationEvent.java:21`
+- clase 'ReservationProcess' grande (LOC=134, métodos=16, campos=12) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java:14`
+- clase 'ReservationProcess' con baja cohesión (21%) — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java:14`
+- método 'ReservationProcess.reconcileWith' con complejidad 6 — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationProcess.java:134`
+- método 'ReservationRequest.ReservationRequest' con 6 parámetros — `src/main/java/com/turnos/reservas/reservation/domain/model/ReservationRequest.java:8`
+- clase 'CatedraAppointmentClient' con baja cohesión (36%) — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/CatedraAppointmentClient.java:37`
+- método 'CatedraReservationEventDto.CatedraReservationEventDto' con 6 parámetros — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/dto/CatedraReservationEventDto.java:10`
+- método 'PhoneSubmittedEventDto.PhoneSubmittedEventDto' con 9 parámetros — `src/main/java/com/turnos/reservas/reservation/infrastructure/messaging/dto/PhoneSubmittedEventDto.java:5`
+- método 'GlobalExceptionHandler.handleExceptionInternal' con 5 parámetros — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java:30`
+- método 'UserRegistration.UserRegistration' con 7 parámetros — `src/main/java/com/turnos/reservas/user/domain/model/UserRegistration.java:7`
+
+**OCP/type-switch** (2)
+- clase 'BearerTokenPropagationInterceptor' con 1 type-checks — `src/main/java/com/turnos/reservas/reservation/infrastructure/client/BearerTokenPropagationInterceptor.java:15`
+- clase 'GlobalExceptionHandler' con 1 type-checks — `src/main/java/com/turnos/reservas/shared/web/GlobalExceptionHandler.java:18`
 
 ## 6. Evolución por commit
 
-Métricas calculadas sobre el estado de `main` en **cada commit** (14 commits con trabajo), del primero al último. La calidad usa el perfil `exigente`; el aporte de código lo mide RepoSense. El índice puede **bajar** al crecer el proyecto: se acumulan señales.
+Métricas calculadas sobre el estado de `main` en **cada commit** (16 commits con trabajo), del primero al último. La calidad usa el perfil `exigente`; el aporte de código lo mide RepoSense. El índice puede **bajar** al crecer el proyecto: se acumulan señales.
 
 ```mermaid
 xychart-beta
     title "Índice de calidad a lo largo de los commits"
-    x-axis ["4bff92a", "4c5525c", "93056c6", "6301db6", "d82f2f0", "18443c4", "ecee5a2", "c0b966d", "df190cf", "76ef317", "476f48e", "360b673", "1973401", "c4b62a1"]
+    x-axis ["4bff92a", "4c5525c", "93056c6", "6301db6", "d82f2f0", "18443c4", "ecee5a2", "c0b966d", "df190cf", "76ef317", "476f48e", "360b673", "1973401", "c4b62a1", "2ef0726", "c395f52"]
     y-axis "Índice" 0 --> 100
-    line [0, 15, 42, 47, 43, 46, 53, 59, 59, 59, 61, 66, 66, 66]
+    line [0, 15, 42, 47, 44, 49, 55, 61, 61, 61, 61, 67, 66, 66, 66, 66]
 ```
 
 | # | Fecha | Commit | Autor | LOC | Índice | %POO | Duplic. | Sueltas |
@@ -169,16 +189,18 @@ xychart-beta
 | 2 | 2026-09-10 | `4c5525c` | Ing. Daniel Quinteros | 0 | 15 | 0% | 0.0% | 0 |
 | 3 | 2026-10-13 | `93056c6` | IanOlmedo | 41 | 42 | 56% | 0.0% | 0 |
 | 4 | 2026-10-17 | `6301db6` | Ing. Daniel Quinteros | 41 | 47 | 56% | 0.0% | 0 |
-| 5 | 2026-10-22 | `d82f2f0` | IanOlmedo | 199 | 43 | 83% | 0.0% | 0 |
-| 6 | 2026-10-24 | `18443c4` | IanOlmedo | 371 | 46 | 73% | 0.0% | 0 |
-| 7 | 2026-10-24 | `ecee5a2` | IanOlmedo | 656 | 53 | 70% | 0.0% | 0 |
-| 8 | 2026-10-30 | `c0b966d` | IanOlmedo | 1,116 | 59 | 65% | 2.6% | 0 |
-| 9 | 2026-11-02 | `df190cf` | IanOlmedo | 1,116 | 59 | 65% | 2.6% | 0 |
-| 10 | 2026-11-02 | `76ef317` | IanOlmedo | 1,544 | 59 | 63% | 1.9% | 0 |
+| 5 | 2026-10-22 | `d82f2f0` | IanOlmedo | 199 | 44 | 83% | 0.0% | 0 |
+| 6 | 2026-10-24 | `18443c4` | IanOlmedo | 371 | 49 | 73% | 0.0% | 0 |
+| 7 | 2026-10-24 | `ecee5a2` | IanOlmedo | 656 | 55 | 70% | 0.0% | 0 |
+| 8 | 2026-10-30 | `c0b966d` | IanOlmedo | 1,116 | 61 | 65% | 2.6% | 0 |
+| 9 | 2026-11-02 | `df190cf` | IanOlmedo | 1,116 | 61 | 65% | 2.6% | 0 |
+| 10 | 2026-11-02 | `76ef317` | IanOlmedo | 1,544 | 61 | 63% | 1.9% | 0 |
 | 11 | 2026-11-04 | `476f48e` | IanOlmedo | 2,094 | 61 | 64% | 1.4% | 0 |
-| 12 | 2026-11-05 | `360b673` | IanOlmedo | 3,334 | 66 | 64% | 0.9% | 0 |
+| 12 | 2026-11-05 | `360b673` | IanOlmedo | 3,334 | 67 | 64% | 0.9% | 0 |
 | 13 | 2026-11-10 | `1973401` | IanOlmedo | 4,056 | 66 | 65% | 0.0% | 0 |
 | 14 | 2026-11-11 | `c4b62a1` | IanOlmedo | 4,521 | 66 | 65% | 0.0% | 0 |
+| 15 | 2026-11-17 | `2ef0726` | IanOlmedo | 5,037 | 66 | 64% | 0.0% | 0 |
+| 16 | 2026-11-17 | `c395f52` | IanOlmedo | 5,037 | 66 | 64% | 0.0% | 0 |
 
 ---
 _Informe generado por la cátedra. Las dimensiones y umbrales corresponden a `calidad.py` (perfil `exigente`); el semáforo, a `CRITERIOS-CALIDAD.md`. La documentación del repositorio no se evalúa. Ante dudas, revisá el archivo señalado._
