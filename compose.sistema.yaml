@@ -1,0 +1,9 @@
+# Todo el sistema con un solo comando: las dos bases y los dos servicios.
+# Necesita los dos repos uno al lado del otro y el .env de cada uno completo:
+#   turnos-servicio-catalogo/  y  turnos-servicio-reservas/
+# Cada compose incluido lee su propio .env, así los secretos no se mezclan.
+#
+#   docker compose -f compose.sistema.yaml up -d --build
+include:
+  - path: ../turnos-servicio-catalogo/compose.yaml
+  - path: compose.yaml

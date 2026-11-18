@@ -132,6 +132,16 @@ docker compose up -d --build
 - El `.env` no se copia a la imagen: compose pasa los valores como variables de entorno.
 - Para integrarse con la cátedra hace falta estar conectado a su red (ZeroTier). Para la disponibilidad, el catálogo tiene que estar levantado.
 
+## Levantar todo el sistema
+
+Con los dos repos clonados uno al lado del otro (`turnos-servicio-catalogo/` y `turnos-servicio-reservas/`) y el `.env` de cada uno completo, desde este repo:
+
+```bash
+docker compose -f compose.sistema.yaml up -d --build
+```
+
+Levanta las dos bases y los dos servicios (catálogo en el puerto 8081 y reservas en el 8082). Cada compose incluido lee su propio `.env`. Antes de usarlo hay que bajar los compose separados (`docker compose down` en cada repo), porque los contenedores tienen el mismo nombre. Si venías usando una versión anterior de los compose (con la base llamada `postgres`), bajalos con `docker compose down --remove-orphans`.
+
 ## Pruebas
 
 ```bash
